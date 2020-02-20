@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace CoverYourAssets
 {
@@ -64,7 +66,7 @@ namespace CoverYourAssets
 
         private static void Update()
         {
-            if (controller.state == GameState.Drawing)
+            if (controller.State == GameState.Drawing)
             {
                 Draw();
             }
@@ -75,18 +77,42 @@ namespace CoverYourAssets
             Console.SetCursorPosition(0, 0);
             Stack<Card> pile = controller.Cards.Pile;
             Console.WriteLine("Top of pile: " + (pile.Count != 0 ? pile.Peek().ToString() : "Empty"));
+
+            for (int i = 0; i < controller.playersCount; i++)
+            {
+                if (i != controller.currentPlayerID)
+                {
+                    Console.Write("Player " + i + ": ");
+                    DisplayHand(controller.Cards.GetPlayersHand(i));
+                    Console.WriteLine("\n");
+                }
+            }
+
             Card[] currentPlayersHand = controller.Cards.GetPlayersHand(controller.currentPlayerID);
             Console.WriteLine("Your hand: " + CardsToString(currentPlayersHand));
         }
 
         private static void DisplayHand(Card[] cards)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < cards.Length; i++)
             {
-                if(i >= cards.Length)
-                {
+                string cardType = cards[i].GetCardTypeAsString();
+                cardType = string.Concat(cardType.Where(c => c >= 'A' && c <= 'Z'));
+                string cardValue = cards[i].value.ToString();
 
+                switch (cardType)
+                {
+                    case "G":
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        break;
+
+                    default:
+                        break;
                 }
+
+                Console.Write(cardType + " - ");
+                Console.ResetColor();
+                Console.Write(cardValue + ", ");
             }
         }
 

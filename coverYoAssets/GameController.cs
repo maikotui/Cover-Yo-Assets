@@ -6,15 +6,19 @@ namespace CoverYourAssets
 {
     class GameController
     {
-        public GameState state { get; private set; }
+        public GameState State { get; private set; }
         public bool IsActive { get; private set; }
         public Cards Cards { get; private set; }
 
+        public int playersCount;
+        
         public int currentPlayerID;
 
         public GameController(int numberOfPlayers)
         {
-            state = GameState.Drawing;
+            playersCount = numberOfPlayers;
+
+            State = GameState.Drawing;
 
             IsActive = true;
 

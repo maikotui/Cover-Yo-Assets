@@ -73,10 +73,16 @@ namespace CoverYourAssets
             }
         }
 
+        public List<Card[]> GetAllPlayersHands()
+        {
+            return playersCards;
+        }
+
         public Card[] GetPlayersHand(int playerID)
         {
             return playersCards[playerID];
         }
+
         public Stack<Queue<Card>> GetPlayersAssets(int playerID)
         {
             return playersAssets[playerID];
