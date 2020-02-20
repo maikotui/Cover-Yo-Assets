@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoverYourAssets", "coverYoAssets\CoverYourAssets.csproj", "{B844310A-E242-4D4A-A7ED-F975C2C6E3D8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B844310A-E242-4D4A-A7ED-F975C2C6E3D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B844310A-E242-4D4A-A7ED-F975C2C6E3D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B844310A-E242-4D4A-A7ED-F975C2C6E3D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B844310A-E242-4D4A-A7ED-F975C2C6E3D8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {523DFA77-DB35-4EFC-B7ED-1A7B3DAE5F76}
+	EndGlobalSection
+EndGlobal
