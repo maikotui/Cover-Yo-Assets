@@ -25,34 +25,51 @@ namespace CoverYourAssets
 
             bool hasReceivedCorrectResponse = false;
             bool badResponse = false;
+            bool notEnough = false;
             while (!hasReceivedCorrectResponse)
             {
                 Console.Clear();
 
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("     _____                     __     __                                      _       ");
-                Console.WriteLine("    / ____|                    \\ \\   / /                   /\\                | |      ");
-                Console.WriteLine("   | |     _____   _____ _ __   \\ \\_/ /__  _   _ _ __     /  \\   ___ ___  ___| |_ ___ ");
-                Console.WriteLine("   | |    / _ \\ \\ / / _ \\ '__|   \\   / _ \\| | | | '__|   / /\\ \\ / __/ __|/ _ \\ __/ __|");
-                Console.WriteLine("   | |___| (_) \\ V /  __/ |       | | (_) | |_| | |     / ____ \\__ \\__ \\  __/ |_\\__ \\");
-                Console.WriteLine("    \\_____\\___/ \\_/ \\___|_|       |_|\\___/ \\__,_|_|    /_/    \\_\\___/___/\\___|\\__|___/");
+                Console.WriteLine(Constants.TITLE_ASCII);
                 Console.ResetColor();
 
                 Console.WriteLine("");
                 Console.WriteLine("");
 
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(badResponse ? ">> Received an invalid number of players." : "");
+                if (badResponse)
+                {
+                    Console.WriteLine(">> Received an invalid number of players.");
+                    badResponse = false;
+                }
+                else if (notEnough)
+                {
+                    Console.WriteLine(">> Thats not enough players");
+                    badResponse = false;
+                }
+                else
+                {
+                    Console.WriteLine("");
+                }
+
                 Console.ResetColor();
 
                 Console.WriteLine("");
-                Console.WriteLine(">> How many players?");
-                Console.Write("<< ");
+                Console.WriteLine("<< How many players?");
+                Console.Write(">> ");
 
                 if (int.TryParse(Console.ReadLine(), out int result))
                 {
-                    controller = new GameController(result);
-                    hasReceivedCorrectResponse = true;
+                    if (result <= 1)
+                    {
+                        notEnough = true;
+                    }
+                    else
+                    {
+                        controller = new GameController(result);
+                        hasReceivedCorrectResponse = true;
+                    }
                 }
                 else
                 {
@@ -66,30 +83,83 @@ namespace CoverYourAssets
 
         private static void Update()
         {
-            if (controller.State == GameState.Drawing)
+            Draw();
+            ProcessInput();
+        }
+
+        private static void ProcessInput()
+        {
+            string input = Console.ReadLine();
+            if (input == "q" || input == "quit")
             {
-                Draw();
+                Start();
             }
         }
 
+        private static int _allHandsOffset = 3;
+        private static int _currentPlayersOffset = 1;
+        private static int _helperOffset = 2;
+        private static int _inputLineOffset = 2;
         private static void Draw()
         {
-            Console.SetCursorPosition(0, 0);
-            Stack<Card> pile = controller.Cards.Pile;
-            Console.WriteLine("Top of pile: " + (pile.Count != 0 ? pile.Peek().ToString() : "Empty"));
+            // Prepare for drawing
+            Console.CursorVisible = false;
+            Console.Clear();
 
+            // Print the pile
+            Console.Write("Top of pile: ");
+            Card? topOfPile = controller.GetTopOfPile();
+            if (controller.CurrentPlayerCanTakeFromPile)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+            }
+            Console.Write(topOfPile == null ? topOfPile.ToString() : "Empty") ;
+            Console.ResetColor();
+
+            // Print all other players hands
+            Console.WriteLine(GenOffset(_allHandsOffset));
             for (int i = 0; i < controller.playersCount; i++)
             {
                 if (i != controller.currentPlayerID)
                 {
-                    Console.Write("Player " + i + ": ");
+                    Console.Write("Player " + (i + 1) + ": ");
                     DisplayHand(controller.Cards.GetPlayersHand(i));
-                    Console.WriteLine("\n");
+                    Console.WriteLine("Top Asset: " + controller.Cards.GetPlayersAssets(i));
+                    if()
+                    {
+
+                    }
                 }
             }
 
+            // Print current player's hands
+            Console.WriteLine(GenOffset(_currentPlayersOffset));
             Card[] currentPlayersHand = controller.Cards.GetPlayersHand(controller.currentPlayerID);
-            Console.WriteLine("Your hand: " + CardsToString(currentPlayersHand));
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("Your hand: ");
+            Console.ResetColor();
+            Console.Write(CardsToString(currentPlayersHand));
+
+            // Print helper info
+            Console.WriteLine(GenOffset(_helperOffset));
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write(Constants.HELPER_TEXT);
+            Console.ResetColor();
+
+            // Print input area
+            Console.WriteLine(GenOffset(_inputLineOffset));
+            Console.Write(">> ");
+            Console.CursorVisible = true;
+        }
+
+        private static string GenOffset(int offset)
+        {
+            string valueToPrint = "";
+            for (int i = 0; i < offset; i++)
+            {
+                valueToPrint += '\n';
+            }
+            return valueToPrint;
         }
 
         private static void DisplayHand(Card[] cards)
