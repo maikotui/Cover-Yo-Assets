@@ -11,21 +11,6 @@ namespace CoverYourAssets
         public bool IsActive { get; private set; }
         private CardSet cards;
 
-        public bool CurrentPlayerCanTakeFromPile
-        {
-            get
-            {
-                foreach (Card card in cards.GetPlayersHand(currentPlayerID))
-                {
-                    if(card.cardType == cards.Pile.Peek().cardType)
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-
         public int playersCount;
 
         public int currentPlayerID;
@@ -43,24 +28,22 @@ namespace CoverYourAssets
 
         public List<Card> GetPlayersHand(int playerID)
         {
-                
+            return new List<Card>(cards.AllPlayersCards[playerID]);
         }
 
-        public void GetPlayersTopAsset(int playerID)
+        public bool TryGetPlayersTopAsset(int playerID, out Card topCard)
         {
-            
+            if(cards.AllPlayersAssets[playerID].TryPeek(out Queue<Card> assetPile))
+            {
+                return assetPile.TryPeek(out topCard);
+            }
+            topCard = default;
+            return false;
         }
 
-        public Card? GetTopOfPile()
+        public bool TryGetTopOfPile(out Card topOfPile)
         {
-            if(cards.Pile.TryPeek(out Card card))
-            {
-                return card;
-            }
-            else
-            {
-                return null;
-            }
+            return cards.Pile.TryPeek(out topOfPile);
         }
 
         public void EndGame()
@@ -70,82 +53,70 @@ namespace CoverYourAssets
 
         private class CardSet
         {
-            private Stack<Card> deck;
-            private Stack<Card> pile;
+            public Stack<Card> Deck { get; private set; }
+            public Stack<Card> Pile { get; private set; }
 
-            private List<Card[]> playersCards;
-            private List<Stack<Queue<Card>>> playersAssets;
+            public List<List<Card>> AllPlayersCards { get; private set; }
+            public List<Stack<Queue<Card>>> AllPlayersAssets { get; private set; }
 
             public CardSet(int numberOfPlayers)
             {
                 BuildDeck();
                 DealCards(numberOfPlayers);
-                pile = new Stack<Card>();
-                pile.Push(deck.Pop());
+                Pile = new Stack<Card>();
+                Pile.Push(Deck.Pop());
             }
 
             private void BuildDeck()
             {
-                deck = new Stack<Card>(110);
+                Deck = new Stack<Card>(110);
                 for (int i = 0; i < 10; i++)
                 {
                     if (i < 4)
                     {
-                        deck.Push(new Card(CardType.Gold, 50_000));
+                        Deck.Push(new Card(CardType.Gold, 50_000));
                     }
                     if (i < 8)
                     {
-                        deck.Push(new Card(CardType.Silver, 25_000));
-                        deck.Push(new Card(CardType.Home, 20_000));
+                        Deck.Push(new Card(CardType.Silver, 25_000));
+                        Deck.Push(new Card(CardType.Home, 20_000));
                     }
-                    deck.Push(new Card(CardType.ClassicAuto, 15_000));
-                    deck.Push(new Card(CardType.Jewels, 15_000));
-                    deck.Push(new Card(CardType.Stocks, 10_000));
-                    deck.Push(new Card(CardType.Bank, 10_000));
-                    deck.Push(new Card(CardType.CoinCollection, 10_000));
-                    deck.Push(new Card(CardType.StampCollection, 5_000));
-                    deck.Push(new Card(CardType.BaseballCards, 5_000));
-                    deck.Push(new Card(CardType.PiggyBank, 5_000));
-                    deck.Push(new Card(CardType.CashUnderTheMattress, 5_000));
+                    Deck.Push(new Card(CardType.ClassicAuto, 15_000));
+                    Deck.Push(new Card(CardType.Jewels, 15_000));
+                    Deck.Push(new Card(CardType.Stocks, 10_000));
+                    Deck.Push(new Card(CardType.Bank, 10_000));
+                    Deck.Push(new Card(CardType.CoinCollection, 10_000));
+                    Deck.Push(new Card(CardType.StampCollection, 5_000));
+                    Deck.Push(new Card(CardType.BaseballCards, 5_000));
+                    Deck.Push(new Card(CardType.PiggyBank, 5_000));
+                    Deck.Push(new Card(CardType.CashUnderTheMattress, 5_000));
                 }
 
                 Random rnd = new Random();
-                var values = deck.ToArray();
-                deck.Clear();
+                var values = Deck.ToArray();
+                Deck.Clear();
                 foreach (var value in values.OrderBy(x => rnd.Next()))
                 {
-                    deck.Push(value);
+                    Deck.Push(value);
                 }
             }
 
             private void DealCards(int numberOfPlayers)
             {
-                playersCards = new List<Card[]>();
-                playersAssets = new List<Stack<Queue<Card>>>();
+                AllPlayersCards = new List<List<Card>>();
+                AllPlayersAssets = new List<Stack<Queue<Card>>>();
                 for (int i = 0; i < numberOfPlayers; i++)
                 {
-                    Card[] hand = new Card[4];
+                    List<Card> hand = new List<Card>();
                     for (int j = 0; j < 4; j++)
                     {
-                        hand[j] = deck.Pop();
+                        hand.Add(Deck.Pop());
                     }
-                    playersCards.Add(hand);
+                    AllPlayersCards.Add(hand);
 
-                    playersAssets.Add(new Stack<Queue<Card>>());
+                    AllPlayersAssets.Add(new Stack<Queue<Card>>());
                 }
             }
-
-            public List<Card> GetDeck()
-            {
-                return deck.ToList<Card>();
-            }
-
-            public List<Card[]> GetAllPlayersHands()
-            {
-                return playersCards;
-            }
-
-            
         }
 
     }

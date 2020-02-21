@@ -96,10 +96,10 @@ namespace CoverYourAssets
             }
         }
 
-        private static int _allHandsOffset = 3;
-        private static int _currentPlayersOffset = 1;
-        private static int _helperOffset = 2;
-        private static int _inputLineOffset = 2;
+        private static readonly int _allHandsOffset = 3;
+        private static readonly int _currentPlayersOffset = 1;
+        private static readonly int _helperOffset = 2;
+        private static readonly int _inputLineOffset = 2;
         private static void Draw()
         {
             // Prepare for drawing
@@ -108,13 +108,17 @@ namespace CoverYourAssets
 
             // Print the pile
             Console.Write("Top of pile: ");
-            Card? topOfPile = controller.GetTopOfPile();
-            if (controller.CurrentPlayerCanTakeFromPile)
+            if(controller.TryGetTopOfPile(out Card topOfPile))
             {
-                Console.ForegroundColor = ConsoleColor.Blue;
+                if (controller.GetPlayersHand(controller.currentPlayerID).Contains(topOfPile))
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                }
+                Console.Write(topOfPile);
+                Console.ResetColor();
             }
-            Console.Write(topOfPile == null ? topOfPile.ToString() : "Empty") ;
-            Console.ResetColor();
+            Console.Write("Empty");
+            
 
             // Print all other players hands
             Console.WriteLine(GenOffset(_allHandsOffset));
@@ -123,18 +127,26 @@ namespace CoverYourAssets
                 if (i != controller.currentPlayerID)
                 {
                     Console.Write("Player " + (i + 1) + ": ");
-                    DisplayHand(controller.Cards.GetPlayersHand(i));
-                    Console.WriteLine("Top Asset: " + controller.Cards.GetPlayersAssets(i));
-                    if()
+                    DisplayHand(controller.GetPlayersHand(i));
+                    Console.Write("Top Asset: ");
+                    if (controller.TryGetPlayersTopAsset(i, out Card topAsset))
                     {
+                        if(controller.GetPlayersHand(controller.currentPlayerID).Contains(topAsset))
+                        {
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                        }
 
+                        Console.Write(topAsset.ToString());
+                        Console.ResetColor();
                     }
+                    Console.WriteLine();
+                    
                 }
             }
 
             // Print current player's hands
             Console.WriteLine(GenOffset(_currentPlayersOffset));
-            Card[] currentPlayersHand = controller.Cards.GetPlayersHand(controller.currentPlayerID);
+            List<Card> currentPlayersHand = controller.GetPlayersHand(controller.currentPlayerID);
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("Your hand: ");
             Console.ResetColor();
@@ -162,13 +174,13 @@ namespace CoverYourAssets
             return valueToPrint;
         }
 
-        private static void DisplayHand(Card[] cards)
+        private static void DisplayHand(List<Card> cards)
         {
-            for (int i = 0; i < cards.Length; i++)
+            foreach (Card card in cards)
             {
-                string cardType = cards[i].GetCardTypeAsString();
+                string cardType = card.GetCardTypeAsString();
                 cardType = string.Concat(cardType.Where(c => c >= 'A' && c <= 'Z'));
-                string cardValue = cards[i].value.ToString();
+                string cardValue = card.value.ToString();
 
                 switch (cardType)
                 {
@@ -186,14 +198,14 @@ namespace CoverYourAssets
             }
         }
 
-        private static string CardsToString(Card[] cards)
+        private static string CardsToString(List<Card> cards)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("{");
-            for (int i = 0; i < cards.Length; i++)
+            for (int i = 0; i < cards.Count; i++)
             {
                 sb.Append(cards[i]);
-                if (i != cards.Length - 1)
+                if (i != cards.Count - 1)
                 {
                     sb.Append(", ");
                 }
