@@ -31,9 +31,37 @@ namespace CoverYourAssets
             return new List<Card>(cards.AllPlayersCards[playerID]);
         }
 
+        public bool CreateAssetFromHand(int playerID, int card1ID, int card2ID)
+        {
+            List<Card> playersHand = cards.AllPlayersCards[playerID];
+            if (playersHand[card1ID].Equals(playersHand[card2ID]))
+            {
+                //TODO: complete implementation
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool CreateAssetFromPile(int playerID, int cardID)
+        {
+            List<Card> playersHand = cards.AllPlayersCards[playerID];
+            if (TryGetTopOfPile(out Card topOfPile) && playersHand[cardID].Equals(topOfPile))
+            {
+                //TODO: complete implementation
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public bool TryGetPlayersTopAsset(int playerID, out Card topCard)
         {
-            if(cards.AllPlayersAssets[playerID].TryPeek(out Queue<Card> assetPile))
+            if (cards.AllPlayersAssets[playerID].TryPeek(out Queue<Card> assetPile))
             {
                 return assetPile.TryPeek(out topCard);
             }

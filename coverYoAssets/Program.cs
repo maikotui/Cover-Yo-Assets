@@ -9,23 +9,26 @@ namespace CoverYourAssets
     class Program
     {
         private static GameController controller;
+        // TODO: create different menus
+        private static int currentMenu;
 
         static void Main(string[] args)
         {
-            Start();
+            Console.SetWindowSize(100, 30);
+            DisplayStartScreen();
             while (controller.IsActive)
             {
                 Update();
             }
         }
 
-        private static void Start()
+        private static void DisplayStartScreen()
         {
-            Console.SetWindowSize(100, 30);
-
             bool hasReceivedCorrectResponse = false;
             bool badResponse = false;
             bool notEnough = false;
+
+            // Until we get a good number of players, keep asking
             while (!hasReceivedCorrectResponse)
             {
                 Console.Clear();
@@ -77,6 +80,7 @@ namespace CoverYourAssets
                 }
             }
 
+            // Prepare the console for drawing
             Console.Clear();
             Console.CursorVisible = false;
         }
@@ -92,7 +96,29 @@ namespace CoverYourAssets
             string input = Console.ReadLine();
             if (input == "q" || input == "quit")
             {
-                Start();
+                DisplayStartScreen();
+            }
+
+            // Process input based on menu
+            switch (currentMenu)
+            {
+                case 1:
+                    switch (input)
+                    {
+                        case "a": // Create an asset from cards in hand
+
+                            break;
+                        case "s": // Attempt to steal from another player
+
+                            break;
+                        case "d": // Discard a single card from the player's hand
+
+                            break;
+                        case "f": // Take the card from the top of the pile if able to
+
+                            break;
+                    }
+                    break;
             }
         }
 
@@ -102,66 +128,74 @@ namespace CoverYourAssets
         private static readonly int _inputLineOffset = 2;
         private static void Draw()
         {
-            // Prepare for drawing
-            Console.CursorVisible = false;
-            Console.Clear();
-
-            // Print the pile
-            Console.Write("Top of pile: ");
-            if(controller.TryGetTopOfPile(out Card topOfPile))
+            switch(currentMenu)
             {
-                if (controller.GetPlayersHand(controller.currentPlayerID).Contains(topOfPile))
-                {
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                }
-                Console.Write(topOfPile);
-                Console.ResetColor();
-            }
-            Console.Write("Empty");
-            
+                case 1:
+                    // Prepare for drawing
+                    Console.CursorVisible = false;
+                    Console.Clear();
 
-            // Print all other players hands
-            Console.WriteLine(GenOffset(_allHandsOffset));
-            for (int i = 0; i < controller.playersCount; i++)
-            {
-                if (i != controller.currentPlayerID)
-                {
-                    Console.Write("Player " + (i + 1) + ": ");
-                    DisplayHand(controller.GetPlayersHand(i));
-                    Console.Write("Top Asset: ");
-                    if (controller.TryGetPlayersTopAsset(i, out Card topAsset))
+                    // Print the pile
+                    Console.Write("Top of pile: ");
+                    if (controller.TryGetTopOfPile(out Card topOfPile))
                     {
-                        if(controller.GetPlayersHand(controller.currentPlayerID).Contains(topAsset))
+                        if (controller.GetPlayersHand(controller.currentPlayerID).Contains(topOfPile))
                         {
                             Console.ForegroundColor = ConsoleColor.Blue;
                         }
-
-                        Console.Write(topAsset.ToString());
+                        Console.Write(topOfPile);
                         Console.ResetColor();
                     }
-                    Console.WriteLine();
-                    
-                }
+                    else
+                    {
+                        Console.Write("Empty");
+                    }
+
+                    // Print all other players hands
+                    Console.WriteLine(GenOffset(_allHandsOffset));
+                    for (int i = 0; i < controller.playersCount; i++)
+                    {
+                        if (i != controller.currentPlayerID)
+                        {
+                            Console.Write("Player " + (i + 1) + ": ");
+                            DisplayHand(controller.GetPlayersHand(i));
+                            Console.Write("Top Asset: ");
+                            if (controller.TryGetPlayersTopAsset(i, out Card topAsset))
+                            {
+                                if (controller.GetPlayersHand(controller.currentPlayerID).Contains(topAsset))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Blue;
+                                }
+
+                                Console.Write(topAsset.ToString());
+                                Console.ResetColor();
+                            }
+                            Console.WriteLine();
+
+                        }
+                    }
+
+                    // Print current player's hands
+                    Console.WriteLine(GenOffset(_currentPlayersOffset));
+                    List<Card> currentPlayersHand = controller.GetPlayersHand(controller.currentPlayerID);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write("Your hand: ");
+                    Console.ResetColor();
+                    Console.Write(CardsToString(currentPlayersHand));
+
+                    // Print helper info
+                    Console.WriteLine(GenOffset(_helperOffset));
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.Write(Constants.HELPER_TEXT);
+                    Console.ResetColor();
+
+                    // Print input area
+                    Console.WriteLine(GenOffset(_inputLineOffset));
+                    Console.Write(">> ");
+                    Console.CursorVisible = true;
+                    break;
             }
-
-            // Print current player's hands
-            Console.WriteLine(GenOffset(_currentPlayersOffset));
-            List<Card> currentPlayersHand = controller.GetPlayersHand(controller.currentPlayerID);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("Your hand: ");
-            Console.ResetColor();
-            Console.Write(CardsToString(currentPlayersHand));
-
-            // Print helper info
-            Console.WriteLine(GenOffset(_helperOffset));
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write(Constants.HELPER_TEXT);
-            Console.ResetColor();
-
-            // Print input area
-            Console.WriteLine(GenOffset(_inputLineOffset));
-            Console.Write(">> ");
-            Console.CursorVisible = true;
+            
         }
 
         private static string GenOffset(int offset)

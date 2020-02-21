@@ -33,6 +33,20 @@ namespace CoverYourAssets
             sb.Append(']');
             return sb.ToString();
         }
+
+        public override bool Equals(object obj)
+        {
+            if(obj is Card card)
+            {
+                return cardType == card.cardType && value == card.value;
+            }
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 
     public enum CardType
