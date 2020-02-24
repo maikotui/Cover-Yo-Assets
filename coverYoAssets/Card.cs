@@ -17,6 +17,11 @@ namespace CoverYourAssets
             this.value = value;
         }
 
+        public bool IsWildcard()
+        {
+            return cardType.Equals(CardType.Silver) || cardType.Equals(CardType.Gold);
+        }
+
         public String GetCardTypeAsString()
         {
             return Regex.Replace(cardType.ToString(), "(\\B[A-Z])", " $1");
@@ -51,6 +56,7 @@ namespace CoverYourAssets
 
     public enum CardType
     {
+        NullCard = 0,
         Gold,
         Silver,
         Home,
@@ -62,7 +68,6 @@ namespace CoverYourAssets
         StampCollection,
         BaseballCards,
         PiggyBank,
-        CashUnderTheMattress,
-        NullCard = 0
+        CashUnderTheMattress
     }
 }
