@@ -8,5 +8,6 @@ namespace CoverYourAssets
 {
     interface IGameView
     {
+        int PromptForNumberOfPlayers();
     }
 }

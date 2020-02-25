@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CardSet.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="FormView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -56,6 +58,9 @@
     <Compile Include="IGameView.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FormView.resx">
+      <DependentUpon>FormView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -64,6 +69,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -77,6 +83,43 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\BankAccount.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BaseballCards.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CashUnderTheMattress.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ClassicAuto.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CoinCollection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Gold.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Home.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Jewels.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PiggyBank.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Silver.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\StampCollection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Stocks.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

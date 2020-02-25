@@ -6,3 +6,4 @@ C:\Users\tuitu\source\repos\Cover-Yo-Assets\obj\Debug\CoverYourAssets.Properties
 C:\Users\tuitu\source\repos\Cover-Yo-Assets\obj\Debug\CoverYourAssets.csproj.GenerateResource.cache
 C:\Users\tuitu\source\repos\Cover-Yo-Assets\obj\Debug\CoverYourAssets.exe
 C:\Users\tuitu\source\repos\Cover-Yo-Assets\obj\Debug\CoverYourAssets.pdb
+C:\Users\tuitu\source\repos\Cover-Yo-Assets\obj\Debug\CoverYourAssets.FormView.resources

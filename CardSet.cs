@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -62,22 +63,22 @@ namespace CoverYourAssets
             {
                 if (i < 4)
                 {
-                    Deck.Push(new Card(CardType.Gold, 50_000));
+                    Deck.Push(new Card(CardType.Gold));
                 }
                 if (i < 8)
                 {
-                    Deck.Push(new Card(CardType.Silver, 25_000));
-                    Deck.Push(new Card(CardType.Home, 20_000));
+                    Deck.Push(new Card(CardType.Silver));
+                    Deck.Push(new Card(CardType.Home));
                 }
-                Deck.Push(new Card(CardType.ClassicAuto, 15_000));
-                Deck.Push(new Card(CardType.Jewels, 15_000));
-                Deck.Push(new Card(CardType.Stocks, 10_000));
-                Deck.Push(new Card(CardType.Bank, 10_000));
-                Deck.Push(new Card(CardType.CoinCollection, 10_000));
-                Deck.Push(new Card(CardType.StampCollection, 5_000));
-                Deck.Push(new Card(CardType.BaseballCards, 5_000));
-                Deck.Push(new Card(CardType.PiggyBank, 5_000));
-                Deck.Push(new Card(CardType.CashUnderTheMattress, 5_000));
+                Deck.Push(new Card(CardType.ClassicAuto));
+                Deck.Push(new Card(CardType.Jewels));
+                Deck.Push(new Card(CardType.Stocks));
+                Deck.Push(new Card(CardType.BankAccount));
+                Deck.Push(new Card(CardType.CoinCollection));
+                Deck.Push(new Card(CardType.StampCollection));
+                Deck.Push(new Card(CardType.BaseballCards));
+                Deck.Push(new Card(CardType.PiggyBank));
+                Deck.Push(new Card(CardType.CashUnderTheMattress));
             }
 
             // Shuffle the cards
@@ -154,12 +155,77 @@ namespace CoverYourAssets
     public struct Card
     {
         public CardType type;
-        public int value;
+        public int Value { get
+            {
+                switch(type)
+                {
+                    case CardType.BankAccount:
+                        return 10_000;
+                    case CardType.BaseballCards:
+                        return 5_000;
+                    case CardType.CashUnderTheMattress:
+                        return 5_000;
+                    case CardType.ClassicAuto:
+                        return 15_000;
+                    case CardType.CoinCollection:
+                        return 10_000;
+                    case CardType.Gold:
+                        return 50_000;
+                    case CardType.Home:
+                        return 20_000;
+                    case CardType.Jewels:
+                        return 15_000;
+                    case CardType.PiggyBank:
+                        return 5_000;
+                    case CardType.Silver:
+                        return 25_000;
+                    case CardType.StampCollection:
+                        return 5_000;
+                    case CardType.Stocks:
+                        return 10_000;
+
+                    default:
+                        return default;
+                }
+            } }
         
-        public Card(CardType type, int value)
+        public Card(CardType type)
         {
             this.type = type;
-            this.value = value;
+        }
+
+        public Bitmap ToBitmap()
+        {
+            switch(type)
+            {
+                case CardType.BankAccount:
+                    return Properties.Resources.BankAccount;
+                case CardType.BaseballCards:
+                    return Properties.Resources.BaseballCards;
+                case CardType.CashUnderTheMattress:
+                    return Properties.Resources.CashUnderTheMattress;
+                case CardType.ClassicAuto:
+                    return Properties.Resources.ClassicAuto;
+                case CardType.CoinCollection:
+                    return Properties.Resources.CoinCollection;
+                case CardType.Gold:
+                    return Properties.Resources.Gold;
+                case CardType.Home:
+                    return Properties.Resources.Home;
+                case CardType.Jewels:
+                    return Properties.Resources.Jewels;
+                case CardType.PiggyBank:
+                    return Properties.Resources.PiggyBank;
+                case CardType.Silver:
+                    return Properties.Resources.Silver;
+                case CardType.StampCollection:
+                    return Properties.Resources.StampCollection;
+                case CardType.Stocks:
+                    return Properties.Resources.Stocks;
+
+                default:
+                    return default;
+            }
         }
 
         public bool IsWildcard()
@@ -179,7 +245,7 @@ namespace CoverYourAssets
             sb.Append(GetCardTypeAsString());
             sb.Append(',');
             sb.Append('$');
-            sb.Append(value);
+            sb.Append(Value);
             sb.Append(']');
             return sb.ToString();
         }
@@ -188,7 +254,7 @@ namespace CoverYourAssets
         {
             if (obj is Card card)
             {
-                return type == card.type && value == card.value;
+                return type == card.type;
             }
             return base.Equals(obj);
         }
@@ -204,14 +270,13 @@ namespace CoverYourAssets
     /// </summary>
     public enum CardType
     {
-        NullCard = 0,
         Gold,
         Silver,
         Home,
         ClassicAuto,
         Jewels,
         Stocks,
-        Bank,
+        BankAccount,
         CoinCollection,
         StampCollection,
         BaseballCards,
