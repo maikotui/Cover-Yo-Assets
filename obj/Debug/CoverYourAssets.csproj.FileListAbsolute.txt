@@ -1,0 +1,9 @@
+C:\Users\tuitu\source\repos\Cover-Yo-Assets\bin\Debug\CoverYourAssets.exe.config
+C:\Users\tuitu\source\repos\Cover-Yo-Assets\bin\Debug\CoverYourAssets.exe
+C:\Users\tuitu\source\repos\Cover-Yo-Assets\bin\Debug\CoverYourAssets.pdb
+C:\Users\tuitu\source\repos\Cover-Yo-Assets\obj\Debug\CoverYourAssets.csprojAssemblyReference.cache
+C:\Users\tuitu\source\repos\Cover-Yo-Assets\obj\Debug\CoverYourAssets.Properties.Resources.resources
+C:\Users\tuitu\source\repos\Cover-Yo-Assets\obj\Debug\CoverYourAssets.csproj.GenerateResource.cache
+C:\Users\tuitu\source\repos\Cover-Yo-Assets\obj\Debug\CoverYourAssets.exe
+C:\Users\tuitu\source\repos\Cover-Yo-Assets\obj\Debug\CoverYourAssets.pdb
+C:\Users\tuitu\source\repos\Cover-Yo-Assets\obj\Debug\CoverYourAssets.FormView.resources
